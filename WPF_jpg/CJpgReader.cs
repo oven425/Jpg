@@ -12,6 +12,7 @@ namespace WPF_jpg
         public string Name { set; get; }
         public ushort Size { set; get; }
         public long Pos { set; get; }
+
     }
     
     public class CJpgReader
