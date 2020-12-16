@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Resources;
 using System.Windows.Shapes;
 
 namespace WPF_jpg
@@ -27,8 +28,15 @@ namespace WPF_jpg
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            StreamResourceInfo sri = Application.GetResourceStream(new Uri("pack://application:,,,/photo - 1.jpg", UriKind.Absolute));
             CJpgReader jr = new CJpgReader();
-            jr.Parse(null);
+            jr.Parse(sri.Stream);
+            this.listview.ItemsSource = jr.Headers;
         }
+    }
+
+    public class CMainUI
+    {
+
     }
 }

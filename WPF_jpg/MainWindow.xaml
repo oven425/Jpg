@@ -9,11 +9,15 @@
         Title="MainWindow" Height="450" Width="800">
    
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <TreeView x:Name="treeview"></TreeView>
-        <TextBox Grid.Column="1"/>
+        <ListView x:Name="listview">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Posision" DisplayMemberBinding="{Binding Pos}"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Size" DisplayMemberBinding="{Binding Size}"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Data}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>
