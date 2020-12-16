@@ -64,13 +64,22 @@ namespace WPF_jpg
                             long exifbegin = br.BaseStream.Position;
                             string mmll = Encoding.UTF8.GetString(br.ReadBytes(2));
                             string version = BitConverter.ToString(br.ReadBytesLN(2));
-
+                            int offset = br.ReadInt32LN();
                             int nextpointer = 0;
                             while (true)
                             {
-                                int offset = br.ReadInt32LN();
+                                if(nextpointer > 0)
+                                {
+                                    br.BaseStream.Position = exifbegin + nextpointer;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                                
                                 short ifd_count = br.ReadInt16LN();
                                 nextpointer = 0;
+                                
                                 for (int i = 0; i < ifd_count; i++)
                                 {
                                     ushort tag = br.ReadUInt16LN();
