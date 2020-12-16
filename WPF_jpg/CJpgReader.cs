@@ -60,20 +60,24 @@ namespace WPF_jpg
                         {
                             string exif = Encoding.UTF8.GetString(br.ReadBytes(4));
                             byte[] bb = br.ReadBytes(2);
+
+                            long exifbegin = br.BaseStream.Position;
+                            string mmll = Encoding.UTF8.GetString(br.ReadBytes(2));
+                            string version = BitConverter.ToString(br.ReadBytesLN(2));
+
+                            int nextpointer = 0;
                             while (true)
                             {
-                                long exifbegin = br.BaseStream.Position;
-                                string mmll = Encoding.UTF8.GetString(br.ReadBytes(2));
-                                string version = BitConverter.ToString(br.ReadBytesLN(2));
                                 int offset = br.ReadInt32LN();
                                 short ifd_count = br.ReadInt16LN();
+                                nextpointer = 0;
                                 for (int i = 0; i < ifd_count; i++)
                                 {
                                     ushort tag = br.ReadUInt16LN();
                                     
                                     short type = br.ReadInt16LN();
                                     int count = br.ReadInt32LN();
-                                    System.Diagnostics.Trace.WriteLine($"tag:{tag} type:{type} count:{count}");
+                                    System.Diagnostics.Trace.WriteLine($"tag:0x{tag:X} type:{type} count:{count}");
                                     switch (type)
                                     {
 
@@ -85,7 +89,7 @@ namespace WPF_jpg
                                             break;
                                         case 4:
                                             {
-                                                int ii = br.ReadInt32LN();
+                                                nextpointer = br.ReadInt32LN();
                                             }
                                             break;
                                         case 7:
@@ -95,7 +99,7 @@ namespace WPF_jpg
                                                 long oldpos = br.BaseStream.Position;
                                                 br.BaseStream.Position = exifbegin + offset1;
                                                 byte[] bbs = br.ReadBytes(count);
-                                                //br.BaseStream.Position = oldpos;
+                                                br.BaseStream.Position = oldpos;
                                             }
                                             break;
                                         default:
@@ -107,7 +111,7 @@ namespace WPF_jpg
 
 
                                 }
-                                int nextifd = br.ReadInt32LN();
+                                //int nextifd = br.ReadInt32LN();
                             }
 
                         }
