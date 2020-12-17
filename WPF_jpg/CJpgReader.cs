@@ -34,6 +34,7 @@ namespace WPF_jpg
                 jh.Name = BitConverter.ToString(header);
                 if(jh.Name == "FF-D9")
                 {
+                    jh.Pos = br.BaseStream.Position;
                     return;
                 }
                 jh.Size = br.ReadUInt16LN();
@@ -59,24 +60,33 @@ namespace WPF_jpg
                     case "FF-E1":
                         {
                             string exif = Encoding.UTF8.GetString(br.ReadBytes(4));
+                            if(exif != "Exif")
+                            {
+                                br.BaseStream.Position = jh.Pos;
+                                header = br.ReadBytes(jh.Size - 2);
+                                break;
+                            }
                             byte[] bb = br.ReadBytes(2);
 
                             long exifbegin = br.BaseStream.Position;
                             string mmll = Encoding.UTF8.GetString(br.ReadBytes(2));
                             string version = BitConverter.ToString(br.ReadBytesLN(2));
-                            int offset = br.ReadInt32LN();
-                            int nextpointer = 0;
+                            //int offset = br.ReadInt32LN();
+                            int nextpointer = br.ReadInt32LN();
                             while (true)
                             {
-                                if(nextpointer > 0)
+                                if (nextpointer > 0)
                                 {
                                     br.BaseStream.Position = exifbegin + nextpointer;
                                 }
                                 else
                                 {
+
+                                    br.BaseStream.Position = jh.Pos;
+                                    header = br.ReadBytes(jh.Size - 2);
                                     break;
                                 }
-                                
+
                                 short ifd_count = br.ReadInt16LN();
                                 nextpointer = 0;
                                 
@@ -94,6 +104,10 @@ namespace WPF_jpg
                                             {
                                                 short ss = br.ReadInt16LN();
                                                 br.ReadBytes(2);
+                                                if (tag == 274)
+                                                {
+                                                    jh.Data = $"Rotate:{ss}";
+                                                }
                                             }
                                             break;
                                         case 4:
@@ -117,7 +131,7 @@ namespace WPF_jpg
                                             }
                                             break;
                                     }
-
+                                    
 
                                 }
                                 //int nextifd = br.ReadInt32LN();
