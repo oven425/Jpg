@@ -100,11 +100,26 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="loading.png" />
+    <Resource Include="photo - 8.jpg" />
+    <Resource Include="photo - 1.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="photo - 1.jpg" />
-    <Resource Include="photo.jpg" />
+    <Resource Include="photo - 3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="photo - 6.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="photo - 2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="photo - 5.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="photo - 4.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="photo - 7.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

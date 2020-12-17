@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Resources;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace WPF_jpg
 {
@@ -26,46 +27,65 @@ namespace WPF_jpg
             InitializeComponent();
         }
 
+        CMinUI m_MainUI;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            StreamResourceInfo sri = Application.GetResourceStream(new Uri("pack://application:,,,/photo - 1.jpg", UriKind.Absolute));
-            CJpgReader jr = new CJpgReader();
-            jr.Parse(sri.Stream);
-            this.listview.ItemsSource = jr.Headers;
-            string str = this.ToHtmlTable(jr.Headers);
-            str = str.Replace("\r\n", "");
+            if(this.m_MainUI == null)
+            {
+                this.m_MainUI = new CMinUI();
+                for(int i=1; i<9; i++)
+                {
+                    CData dd = new CData();
+                    dd.Name = $"photo - {i}";
+                    dd.Image = $"pack://application:,,,/{dd.Name}.jpg";
+                    StreamResourceInfo sri = Application.GetResourceStream(new Uri(dd.Image, UriKind.Absolute));
+                    CJpgReader jr = new CJpgReader();
+                    jr.Parse(sri.Stream);
+                    switch(jr.Rotate)
+                    {
+                        case 1:
+                        case 2:
+                            {
+                                dd.Angle = 0;
+                            }
+                            break;
+                        case 3:
+                        case 4:
+                            {
+                                dd.Angle = 180;
+                            }
+                            break;
+                        case 5:
+                        case 6:
+                            {
+                                dd.Angle = 270;
+                            }
+                            break;
+                        case 7:
+                        case 8:
+                            {
+                                dd.Angle = 90;
+                            }
+                            break;
+                    }
+                    if(jr.Rotate >=0)
+                    {
+                        dd.IsMirror = jr.Rotate % 2 == 0 ? -1 : 1;
+                    }
+                    else
+                    {
+                        dd.IsMirror = 1;
+                    }
+                    dd.Headers = jr.Headers;
+                    this.m_MainUI.Datas.Add(dd);
+                }
+
+                this.DataContext = this.m_MainUI;
+            }
         }
 
         string ToHtmlTable(List<CJpgHear> datas)
         {
-            //< style >
-            //table, th, td {
-            //            border: 1px solid black;
-            //                border - collapse: collapse;
-            //            }
-            //</ style >
-            //< table >
-            //  < tr >
-            //    < th > Firstname </ th >
-            //    < th > Lastname </ th >
-            //    < th > Age </ th >
-            //  </ tr >
-            //  < tr >
-            //    < td > Jill </ td >
-            //    < td > Smith </ td >
-            //    < td > 50 </ td >
-            //  </ tr >
-            //  < tr >
-            //    < td > Eve </ td >
-            //    < td > Jackson </ td >
-            //    < td > 94 </ td >
-            //  </ tr >
-            //  < tr >
-            //    < td > John </ td >
-            //    < td > Doe </ td >
-            //    < td > 80 </ td >
-            //  </ tr >
-            //</ table >
             StringBuilder strb = new StringBuilder();
             strb.AppendLine("<style>");
             strb.AppendLine("table, th, td {border: 1px solid black;border - collapse: collapse;}");
@@ -93,5 +113,27 @@ namespace WPF_jpg
             strb.AppendLine("</table>");
             return strb.ToString();
         }
+    }
+
+    public class CMinUI : INotifyPropertyChanged
+    {
+        public List<CData> Datas { set; get; } = new List<CData>();
+        public event PropertyChangedEventHandler PropertyChanged;
+        void Update(string name)
+        {
+            if(this.PropertyChanged != null)
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+    }
+
+    public class CData
+    {
+        public string Image { set; get; }
+        public string Name { set; get; }
+        public List<CJpgHear> Headers { set; get; }
+        public int Angle { set; get; }
+        public int IsMirror { set; get; }
     }
 }

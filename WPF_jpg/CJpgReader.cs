@@ -20,10 +20,10 @@ namespace WPF_jpg
     
     public class CJpgReader
     {
+        public int Rotate { set; get; } = -1;
         public List<CJpgHear> Headers { set; get; } = new List<CJpgHear>();
         public void Parse(Stream stream)
         {
-            //BinaryReader br = new BinaryReader(File.Open("D:\\mobile01-51f74a1e86330f30c9e565237f11e099.jpg", FileMode.Open));
             BinaryReader br = new BinaryReader(stream);
             byte[] header = br.ReadBytes(2);
             while (true)
@@ -106,6 +106,7 @@ namespace WPF_jpg
                                                 br.ReadBytes(2);
                                                 if (tag == 274)
                                                 {
+                                                    this.Rotate = ss;
                                                     jh.Data = $"Rotate:{ss}";
                                                 }
                                             }

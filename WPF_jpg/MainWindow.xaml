@@ -7,17 +7,44 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Title="MainWindow" Height="450" Width="800">
-   
     <Grid>
-        <ListView x:Name="listview">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="listbox_" ItemsSource="{Binding Datas}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Name}"/>
+                        <Image Source="{Binding Image}" RenderTransformOrigin="0.5,0.5">
+                            <Image.LayoutTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="{Binding Angle}"/>
+                                    <ScaleTransform ScaleX="{Binding IsMirror}" ScaleY="1"/>
+                                </TransformGroup>
+                                
+                            </Image.LayoutTransform>
+                        </Image>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="2"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+        <ListView x:Name="listView" Grid.Column="1" ItemsSource="{Binding SelectedItem.Headers, ElementName=listbox_}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Posision" DisplayMemberBinding="{Binding Pos}"/>
+                    <GridViewColumn Header="Position" DisplayMemberBinding="{Binding Pos}"/>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
                     <GridViewColumn Header="Size" DisplayMemberBinding="{Binding Size}"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Data}"/>
+                    <GridViewColumn Header="Data" DisplayMemberBinding="{Binding Data}"/>
                 </GridView>
             </ListView.View>
         </ListView>
     </Grid>
+
 </Window>
