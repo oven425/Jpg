@@ -17,7 +17,7 @@ using (FileStream fs = new FileStream("../../photo - 2.jpg", FileMode.Open))
     //jpg format list
 }
 ```
-#jpg format list
+# jpg format list
 ## no exif data
  Position | Name  | Size | Data                  
 ----------|-------|------|-----------------------
