@@ -1,6 +1,6 @@
 # Purpose
 Get width,hieght and rotate of exif
-
+# Sample code
 ```csharp
 CJpgReader jpgr = new CJpgReader();
 using (FileStream fs = new FileStream("../../photo - 2.jpg", FileMode.Open))
