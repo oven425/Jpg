@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 namespace WPF_jpg
 {
+    public static class StringExt
+    {
+        public static string PadRight(this string src, char data, int count)
+        {
+            int len = count - src.Length;
+            return len>0?$"{src}{new string(data, len)}":src;
+        }
+    }
     public static class BinaryReader_Litten
     {
         public static byte[] ReadBytesLN(this BinaryReader src, int count)

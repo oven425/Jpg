@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Resources;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.IO;
 
 namespace WPF_jpg
 {
@@ -30,7 +31,7 @@ namespace WPF_jpg
         CMinUI m_MainUI;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if(this.m_MainUI == null)
+            if (this.m_MainUI == null)
             {
                 this.m_MainUI = new CMinUI();
                 for(int i=1; i<9; i++)
@@ -82,6 +83,28 @@ namespace WPF_jpg
 
                 this.DataContext = this.m_MainUI;
             }
+        }
+
+        string ToMarkdownTable(List<CJpgHear> datas)
+        {
+            StringBuilder strb = new StringBuilder();
+            int pos_len = datas.Select(x => x.Pos).Max(x => x.ToString().Length);
+            pos_len = Math.Max("Position".Length, pos_len);
+            int size_len = datas.Select(x => x.Size).Max(x => x.ToString().Length);
+            size_len = Math.Max("Size".Length, size_len);
+            int data_len = datas.Where(x => string.IsNullOrEmpty(x.Data) == false).Select(x => x.Data).Max(x => x.ToString().Length);
+            data_len = Math.Max("Data".Length, data_len);
+
+            int name_len = datas.Where(x => string.IsNullOrEmpty(x.Name) == false).Select(x => x.Name).Max(x => x.Length);
+            name_len = Math.Max("Data".Length, name_len);
+
+            strb.AppendLine($" {"Position".PadRight(' ', pos_len)} | {"Name".PadRight(' ', name_len)} | {"Size".PadRight(' ', size_len)} | {"Data".PadRight(' ', data_len)} ");
+            strb.AppendLine($"{new string('-', pos_len+2)}|{new string('-', name_len + 2)}|{new string('-', size_len + 2)}|{new string('-', data_len + 2)}");
+            foreach (var oo in datas)
+            {
+                strb.AppendLine($" {oo.Pos.ToString().PadRight(' ', pos_len)} | {oo.Name?.PadRight(' ', name_len)} | {oo.Size.ToString().PadRight(' ', size_len)} | {oo.Data?.PadRight(' ', data_len)} ");
+            }
+            return strb.ToString();
         }
 
         string ToHtmlTable(List<CJpgHear> datas)
