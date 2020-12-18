@@ -2,11 +2,10 @@
 Get width,hieght and rotate of exif
 # Sample code
 ```csharp
-CJpgReader jpgr = new CJpgReader();
 using (FileStream fs = new FileStream("../../photo - 2.jpg", FileMode.Open))
 {
+    CJpgReader jpgr = new CJpgReader();
     jpgr.Parse(fs);
-    string str = ToMarkdownTable(jpgr.Headers);
     //jpgr.Rotate
     //-1:none exif 
     //1:normal 2:mirror
