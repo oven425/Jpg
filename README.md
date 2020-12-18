@@ -8,13 +8,17 @@ using (FileStream fs = new FileStream("../../photo - 2.jpg", FileMode.Open))
     jpgr.Parse(fs);
     string str = ToMarkdownTable(jpgr.Headers);
     //jpgr.Rotate
-    //-1:none exif 1:normal 2:mirror 3:
+    //-1:none exif 
+    //1:normal 2:mirror
+    //3:180    4:180 mirror
+    //5:270    6:270 mirror
+    //7:90     8:90 mirror
     //jpgr.Headers
     //jpg format list
 }
 ```
-
-parse jpg get 
+#jpg format list
+## no exif data
  Position | Name  | Size | Data                  
 ----------|-------|------|-----------------------
  6        | FF-E0 | 16   |  
@@ -28,7 +32,7 @@ parse jpg get
  379      | FF-DA | 12   |  
  198248   | FF-D9 | 0    |  
 
-
+## has exif
  Position | Name  | Size | Data                  
 ----------|-------|------|-----------------------
  6        | FF-E0 | 16   |  
